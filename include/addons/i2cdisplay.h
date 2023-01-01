@@ -12,6 +12,7 @@
 #include "BoardConfig.h"
 #include "gpaddon.h"
 #include "gamepad.h"
+#include "displaymenu.h"
 
 #ifndef HAS_I2C_DISPLAY
 #define HAS_I2C_DISPLAY -1
@@ -59,6 +60,8 @@
 // i2C OLED Display
 class I2CDisplayAddon : public GPAddon
 {
+private:
+	DisplayMenu *dm;
 public:
 	virtual bool available();  // GPAddon
 	virtual void setup();

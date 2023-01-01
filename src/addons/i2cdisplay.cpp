@@ -35,6 +35,7 @@ void I2CDisplayAddon::setup() {
 	clearScreen(1);
 	gamepad = Storage::getInstance().GetGamepad();
 	pGamepad = Storage::getInstance().GetProcessedGamepad();
+	dm = new DisplayMenu(&obd);
 
 }
 
@@ -49,6 +50,8 @@ void I2CDisplayAddon::process() {
 		drawText(0, 3, "[Web Config Mode]");
 		drawText(0, 4, std::string("GP2040-CE : ") + std::string(GP2040VERSION));
 		drawText(0, 5, "[http://192.168.7.1]");
+	} else if (true) {
+		dm->processMenu();
 	} else if (getMillis() < 7500 && Storage::getInstance().GetSplashMode() != NOSPLASH) {
 		const uint8_t* splashChoice = splashImageMain;
 		switch (Storage::getInstance().GetSplashChoice()) {
