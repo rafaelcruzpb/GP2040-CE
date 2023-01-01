@@ -6,13 +6,19 @@ DisplayMenu::DisplayMenu(OBDISP *obd) {
     this->gamepad = Storage::getInstance().GetProcessedGamepad();
     this->menu = {
         {
-            "Display",  
+            "SETTINGS",  
         },
         {
-            "Buttons",  
+            "PIN MAPPING",  
         },
         {
-            "About",  
+            "LED",  
+        },
+        {
+            "DISPLAY",  
+        },
+        {
+            "BUZZER",  
         },
     };
 }
@@ -36,5 +42,15 @@ void DisplayMenu::processMenu() {
     this->processGamepad();
 
     MenuItem m = this->menu[selected];
-    obdWriteString(obd, 0, 0, 5, (char*)m.description.c_str(), FONT_6x8, 0, 0);
+    
+    string indexString = to_string(selected+1)+"/"+to_string(this->menu.size());
+    obdWriteString(obd, 0, 0, 0, (char*) getStringCentered("MENU").c_str(), FONT_6x8, 0, 0);
+    obdWriteString(obd, 0, 0, 7, (char*) getStringCentered(indexString + " " + m.description).c_str(), FONT_6x8, 0, 0);
+}
+
+string DisplayMenu::getStringCentered(string str) {
+    uint8_t filler = (DISPLAY_MENU_TEXT_LIMIT / 2) - (str.length() / 2);
+    str.insert(0, filler, ' ');
+    str.append(filler, ' ');
+    return str;
 }
