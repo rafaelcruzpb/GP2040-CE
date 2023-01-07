@@ -20,6 +20,16 @@ const vector<Song>songs = {
             E5,E5,G4,FS5,E5
         }
     },
+    {
+        "DOOM_THEME_SONG",
+        130,
+        {
+            E2,  E2,  E3,  E2,  E2,  D3,  E2,  E2,
+            C3,  E2,  E2,  AS2,  E2,  E2,  B2,  C3, 
+            E2,  E2,  E3,  E2,  E2,  D3,  E2,  E2, 
+            C3,  E2,  E2,  AS2, AS2, AS2
+        }
+    },
 };
 
 #endif
