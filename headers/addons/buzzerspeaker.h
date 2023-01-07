@@ -18,6 +18,10 @@ using namespace std;
 #define BUZZER_VOLUME 100
 #endif
 
+#ifndef BUZZER_INTRO_SONG
+#define BUZZER_INTRO_SONG -1
+#endif
+
 // Buzzer Speaker Module
 #define BuzzerSpeakerName "BuzzerSpeaker"
 
@@ -114,9 +118,11 @@ enum Tone {
 };
 
 struct Song {
+	string name;
 	uint16_t toneDuration;
 	vector<Tone> song;
-	Song(uint16_t t, vector<Tone> s){
+	Song(string n, uint16_t t, vector<Tone> s){
+		name = n;
 		toneDuration = t;
 		song = s;
 	};
@@ -127,7 +133,9 @@ class BuzzerSpeakerAddon : public GPAddon
 {
 private:
 	void processBuzzer();
-	void play(Song *song);
+	void play(string song);
+	void play(uint8_t song);
+	void play(const Song *song);
 	void playIntro();
 	void stop();
 	uint32_t pwmSetFreqDuty(uint slice, uint channel, uint32_t frequency, float duty);

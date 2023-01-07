@@ -83,6 +83,7 @@ struct BoardOptions
 	bool buzzerEnabled;
 	uint8_t buzzerPin;
 	uint8_t buzzerVolume;
+	int8_t buzzerIntroSong;
 	uint32_t checksum;
 };
 

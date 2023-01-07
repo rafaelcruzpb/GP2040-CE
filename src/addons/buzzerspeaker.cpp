@@ -1,5 +1,5 @@
 #include "hardware/pwm.h"
-#include "addons/buzzerspeaker.h"
+// #include "addons/buzzerspeaker.h"
 #include "songs.h"
 #include "storagemanager.h"
 #include "math.h"
@@ -30,12 +30,14 @@ void BuzzerSpeakerAddon::process() {
 void BuzzerSpeakerAddon::playIntro() {
 	if (getMillis() < 1000) return;
 
+	BoardOptions boardOptions = Storage::getInstance().getBoardOptions();
+
 	bool isConfigMode = Storage::getInstance().GetConfigMode();
 	
 	if (!get_usb_mounted() || isConfigMode) {
-		play(&configModeSong);
+		play("CONFIG_MODE_SONG");
 	} else {
-		play(&introSong);
+		play(boardOptions.buzzerIntroSong);
 	}
 	introPlayed = true;
 }
@@ -65,9 +67,23 @@ void BuzzerSpeakerAddon::processBuzzer() {
 	pwm_set_enabled (buzzerPinSlice, true);
 }
 
-void BuzzerSpeakerAddon::play(Song *song) {
+void BuzzerSpeakerAddon::play(const Song *song) {
 	startedSongMils = getMillis();
-	currentSong = song;
+	currentSong = (Song *) song;
+}
+
+void BuzzerSpeakerAddon::play(uint8_t song) {
+	if (song > -1 && songs.size() > song) {
+		play(&songs[song]);
+	}
+}
+
+void BuzzerSpeakerAddon::play(string song) {
+	for (int s = 0; s < songs.size()-1; s++) {
+		if (songs[s].name == song) {
+			play(&songs[s]);
+		}
+	}
 }
 
 void BuzzerSpeakerAddon::stop() {

@@ -18,6 +18,7 @@
 #include "lwip/mem.h"
 
 #include "bitmaps.h"
+#include "songs.h"
 
 #define PATH_CGI_ACTION "/cgi/action"
 
@@ -461,6 +462,7 @@ std::string setAddonOptions()
 	boardOptions.buzzerEnabled    = doc["buzzerEnabled"];
 	boardOptions.buzzerPin        = doc["buzzerPin"] == -1 ? 0xFF : doc["buzzerPin"];
 	boardOptions.buzzerVolume     = doc["buzzerVolume"];
+	boardOptions.buzzerIntroSong  = doc["buzzerIntroSong"];
 
 	Storage::getInstance().setBoardOptions(boardOptions);
 
@@ -497,6 +499,7 @@ std::string getAddonOptions()
 	doc["buzzerEnabled"] = boardOptions.buzzerEnabled ? 1 : 0;
 	doc["buzzerPin"] = boardOptions.buzzerPin == 0xFF ? -1 : boardOptions.buzzerPin;
 	doc["buzzerVolume"] = boardOptions.buzzerVolume;
+	doc["buzzerIntroSong"] = boardOptions.buzzerIntroSong;
 
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
 	auto usedPins = doc.createNestedArray("usedPins");
@@ -518,6 +521,11 @@ std::string getAddonOptions()
 	usedPins.add(gamepad->mapButtonR3->pin);
 	usedPins.add(gamepad->mapButtonA1->pin);
 	usedPins.add(gamepad->mapButtonA2->pin);
+
+	auto buzzerSongs = doc.createNestedArray("buzzerSongs");
+	for (int s = 0 ; s < songs.size(); s++) {
+		buzzerSongs.add(songs[s].name);
+	}
 
 	return serialize_json(doc);
 }
