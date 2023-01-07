@@ -80,6 +80,9 @@ struct BoardOptions
 	uint8_t dualDirCombineMode; // Mix/Gamepad/Dual/None
 	OnBoardLedMode onBoardLedMode;
 	char boardVersion[32]; // 32-char limit to board name
+	bool buzzerEnabled;
+	uint8_t buzzerPin;
+	uint8_t buzzerVolume;
 	uint32_t checksum;
 };
 
