@@ -36,6 +36,8 @@ void BuzzerSpeakerAddon::playIntro() {
 	
 	if (!get_usb_mounted() || isConfigMode) {
 		play("CONFIG_MODE_SONG");
+	} if (boardOptions.buzzerIntroSong == 0) {
+		play(boardOptions.buzzerCustomIntroSong);
 	} else {
 		play(boardOptions.buzzerIntroSong);
 	}

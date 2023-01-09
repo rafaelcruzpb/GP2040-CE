@@ -84,6 +84,8 @@ struct BoardOptions
 	uint8_t buzzerPin;
 	uint8_t buzzerVolume;
 	int8_t buzzerIntroSong;
+	string buzzerCustomIntroSong;
+	uint8_t buzzerCustomIntroSongToneDuration;
 	uint32_t checksum;
 };
 

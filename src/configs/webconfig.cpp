@@ -463,6 +463,8 @@ std::string setAddonOptions()
 	boardOptions.buzzerPin        = doc["buzzerPin"] == -1 ? 0xFF : doc["buzzerPin"];
 	boardOptions.buzzerVolume     = doc["buzzerVolume"];
 	boardOptions.buzzerIntroSong  = doc["buzzerIntroSong"];
+	boardOptions.buzzerCustomIntroSongToneDuration  = doc["buzzerCustomIntroSongToneDuration"];
+	// boardOptions.buzzerCustomIntroSong = doc["buzzerCustomIntroSong"];
 
 	Storage::getInstance().setBoardOptions(boardOptions);
 
@@ -500,6 +502,8 @@ std::string getAddonOptions()
 	doc["buzzerPin"] = boardOptions.buzzerPin == 0xFF ? -1 : boardOptions.buzzerPin;
 	doc["buzzerVolume"] = boardOptions.buzzerVolume;
 	doc["buzzerIntroSong"] = boardOptions.buzzerIntroSong;
+	doc["buzzerCustomIntroSongToneDuration"] = boardOptions.buzzerCustomIntroSongToneDuration;
+	doc["buzzerCustomIntroSong"] = boardOptions.buzzerCustomIntroSong;
 
 	Gamepad * gamepad = Storage::getInstance().GetGamepad();
 	auto usedPins = doc.createNestedArray("usedPins");
