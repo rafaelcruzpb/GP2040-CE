@@ -1,5 +1,4 @@
 #include "hardware/pwm.h"
-// #include "addons/buzzerspeaker.h"
 #include "songs.h"
 #include "storagemanager.h"
 #include "math.h"
@@ -36,10 +35,10 @@ void BuzzerSpeakerAddon::playIntro() {
 	
 	if (!get_usb_mounted() || isConfigMode) {
 		play("CONFIG_MODE_SONG");
-	} if (boardOptions.buzzerIntroSong == 0) {
-		play(boardOptions.buzzerCustomIntroSong);
+	} else if (boardOptions.buzzerIntroSong == 0) {
+		play(boardOptions.buzzerCustomIntroSongToneDuration, boardOptions.buzzerCustomIntroSong);
 	} else {
-		play(boardOptions.buzzerIntroSong);
+		play(boardOptions.buzzerIntroSong-1);
 	}
 	introPlayed = true;
 }
@@ -53,9 +52,9 @@ void BuzzerSpeakerAddon::processBuzzer() {
 	uint32_t currentTimeSong = getMillis() - startedSongMils;
 	uint32_t totalTimeSong = currentSong->song.size() * currentSong->toneDuration;
 	uint16_t currentTonePosition = floor((currentTimeSong * currentSong->song.size()) / totalTimeSong);
-	Tone currentTone = currentSong->song[currentTonePosition];
+	uint16_t currentTone = currentSong->song[currentTonePosition];
 
-	if (currentTonePosition > currentSong->song.size()) {
+	if (currentTonePosition >= currentSong->song.size()) {
 		stop();
 		return;
 	}
@@ -85,12 +84,41 @@ void BuzzerSpeakerAddon::play(string song) {
 		if (songs[s].name == song) {
 			play(&songs[s]);
 		}
-	}
+	};
+}
+
+void BuzzerSpeakerAddon::play(uint8_t toneDuration, char songNotes[512]) {
+	currentSong = new Song("", toneDuration, explode(songNotes, ',')); 
+	startedSongMils = getMillis();
 }
 
 void BuzzerSpeakerAddon::stop() {
 	pwm_set_enabled (buzzerPinSlice, false);
 	currentSong = NULL;
+}
+
+vector<int> BuzzerSpeakerAddon::explode(const string& str, const char& ch)  {
+	string next;
+    vector<int> result;
+
+    // For each character in the string
+    for (string::const_iterator it = str.begin(); it != str.end(); it++) {
+        // If we've hit the terminal character
+        if (*it == ch) {
+            // If we have some characters accumulated
+            if (!next.empty()) {
+                // Add them to the result vector
+                result.push_back(stoi(next));
+                next.clear();
+            }
+        } else {
+            // Accumulate the next character into the sequence
+            next += *it;
+        }
+    }
+    if (!next.empty())
+         result.push_back(stoi(next));
+    return result;
 }
 
 uint32_t BuzzerSpeakerAddon::pwmSetFreqDuty(uint slice, uint channel, uint32_t frequency, float duty) {

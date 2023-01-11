@@ -464,7 +464,8 @@ std::string setAddonOptions()
 	boardOptions.buzzerVolume     = doc["buzzerVolume"];
 	boardOptions.buzzerIntroSong  = doc["buzzerIntroSong"];
 	boardOptions.buzzerCustomIntroSongToneDuration  = doc["buzzerCustomIntroSongToneDuration"];
-	// boardOptions.buzzerCustomIntroSong = doc["buzzerCustomIntroSong"];
+	memset(boardOptions.buzzerCustomIntroSong, 0, 512 * (sizeof boardOptions.buzzerCustomIntroSong[0]));
+	strncpy(boardOptions.buzzerCustomIntroSong, doc["buzzerCustomIntroSong"], strlen(doc["buzzerCustomIntroSong"]));
 
 	Storage::getInstance().setBoardOptions(boardOptions);
 
@@ -528,8 +529,12 @@ std::string getAddonOptions()
 
 	auto buzzerSongs = doc.createNestedArray("buzzerSongs");
 	for (int s = 0 ; s < songs.size(); s++) {
-		buzzerSongs.add(songs[s].name);
-	}
+		buzzerSongs[s]["name"] = songs[s].name;
+		buzzerSongs[s]["toneDuration"] = songs[s].toneDuration;
+		for (int i = 0; i < songs[s].song.size(); i++) {
+			buzzerSongs[s]["tones"][i] = songs[s].song[i];
+		}
+	};
 
 	return serialize_json(doc);
 }

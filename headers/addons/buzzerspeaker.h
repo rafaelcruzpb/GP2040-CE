@@ -120,8 +120,8 @@ enum Tone {
 struct Song {
 	string name;
 	uint16_t toneDuration;
-	vector<Tone> song;
-	Song(string n, uint16_t t, vector<Tone> s){
+	vector<int> song;
+	Song(string n, uint16_t t, vector<int> s){
 		name = n;
 		toneDuration = t;
 		song = s;
@@ -134,10 +134,12 @@ class BuzzerSpeakerAddon : public GPAddon
 private:
 	void processBuzzer();
 	void play(string song);
+	void play(uint8_t toneDuration, char songNotes[512]);
 	void play(uint8_t song);
 	void play(const Song *song);
 	void playIntro();
 	void stop();
+	vector<int> explode(const string& str, const char& ch);
 	uint32_t pwmSetFreqDuty(uint slice, uint channel, uint32_t frequency, float duty);
 	uint8_t buzzerPinSlice;
 	uint8_t buzzerPinChannel;
